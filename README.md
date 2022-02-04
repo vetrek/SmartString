@@ -1,5 +1,6 @@
 # SmartNet
-SmartNet is an HTTP networking library written in Swift that aims to make networking as easy as possible.
+A powerful and small library that will allow the creation of complex String Styles. Provides also an easy way to handle **TAPPING** on each substring!!
+
 
 ## Usage
 
@@ -81,19 +82,19 @@ Result
 
 <img src="DocsAssets/example_4.png" width=200/>
 
-### String Tap Handlers
+### Tap Handlers!
 
 ```swift
 let smartString = "Hello "
     .font { .systemFont(ofSize: 18) }
     .onTap { string in
-        print(string) // This will print "Hello " when tapping the word "Hello " within the label
+        print(string) // This will print "Hello " when tapping the substring "Hello " within the label
     }
 + "world"
     .color(.red)
     .bold()
     .onTap { string in
-        print(string) // This will print "world" when tapping the word "world" within the label
+        print(string) // This will print "world" when tapping the substring "world" within the label
     }
     
 label.smartString = smartString
