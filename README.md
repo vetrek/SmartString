@@ -34,7 +34,8 @@ label.smartString = "Hello world!".style(style)
 ```
 
 Result
-<img src="DocsAssets/example_2.png" alt="" width=352/>
+
+<img src="DocsAssets/example_2.png" alt="" width=352 height=80/>
 
 String style interpolation
 ```swift
@@ -51,4 +52,6 @@ let smartString = "Hello"
 label.smartString = smartString
 ```
 
-<img src="Documentation_Assests/image_3.png" alt="" width=400px/>
+Result
+
+<img src="Documentation_Assests/example_3.png" alt="" width=400px/>
