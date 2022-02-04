@@ -23,6 +23,7 @@ class ViewController: UIViewController {
             .onTap { string in
                 print(string)
             }
+        + "!"
         
         let label = UILabel()
         label.smartString = smartString
