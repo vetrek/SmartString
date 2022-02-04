@@ -3,9 +3,9 @@
 A powerful and small library that will allow the creation of complex String Styles. Provides also an easy way to handle **TAPPING** on each substring!
 
 
-## Usage
+## Example
 
-### Basic usage
+* Basic
 ```swift
 let smartString = "Hello world!"
     .font(.boldSystemFont(ofSize: 30))
@@ -30,7 +30,7 @@ Result
 
 <img src="DocsAssets/example_1.png" alt="" width=200/>
 
-### Using a predefined Style
+### Predefined Style
 ```swift
 let style = SmartStringStyle(
     color: .blue,
@@ -48,7 +48,7 @@ Result
 
 <img src="DocsAssets/example_2.png" alt="" width=200/>
 
-### String style interpolation
+### String + SmartString interpolation
 ```swift
 let smartString = "Hello"
     .font(.boldSystemFont(ofSize: 30))
@@ -67,7 +67,7 @@ Result
 
 <img src="DocsAssets/example_3.png" width=200/>
 
-### String style interpolation using Styles
+### String + SmartString interpolation using predefined Styles
 ```swift
 let style1 = SmartStringStyle(
     color: .green,
@@ -92,7 +92,7 @@ Result
 
 <img src="DocsAssets/example_4.png" width=200/>
 
-### Tap Handlers!
+### Label substring Tap Handlers
 
 ```swift
 let smartString = "Hello "
