@@ -15,6 +15,7 @@ class ViewController: UIViewController {
         let smartString =
         "Text 1"
             .style(.title)
+        + "\nCiao"
         + "\nText 2"
             .font { .systemFont(ofSize: 18) }
             .color { .systemPink }

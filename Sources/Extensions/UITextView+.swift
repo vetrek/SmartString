@@ -8,7 +8,7 @@
 import Foundation
 import UIKit
 
-extension UITextView {
+public extension UITextView {
     private static let smartString = AssociatedObject<SmartString>()
     
     var smartString: SmartString? {

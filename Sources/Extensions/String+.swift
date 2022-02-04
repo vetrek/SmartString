@@ -59,7 +59,6 @@ extension String: SmartStringable {
     public func shadow(closure: () -> SmartShadow) -> SmartString {
         SmartString(string: self).shadow(closure: closure)
     }
-
 }
 
 // MARK: - Public Helpers

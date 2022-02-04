@@ -19,7 +19,6 @@ final class AssociatedObject<T: AnyObject> {
     /// Accesses associated object.
     /// - Parameter index: An object whose associated object is to be accessed.
     subscript(index: AnyObject) -> T? {
-        
         get { return objc_getAssociatedObject(index, Unmanaged.passUnretained(self).toOpaque()) as! T? }
         set { objc_setAssociatedObject(index, Unmanaged.passUnretained(self).toOpaque(), newValue, policy) }
     }
