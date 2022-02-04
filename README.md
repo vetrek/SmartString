@@ -1,6 +1,6 @@
 # SmartString
 
-A powerful and small library that will allow the creation of complex String Styles. Provides also an easy way to handle **TAPPING** on each substring!!
+A powerful and small library that will allow the creation of complex String Styles. Provides also an easy way to handle **TAPPING** on each substring!
 
 
 ## Usage
@@ -11,6 +11,15 @@ let smartString = "Hello world!"
     .font(.boldSystemFont(ofSize: 30))
     .color(.blue)
     .underline()
+    .shadow(SmartShadow()
+)
+
+label.smartString = smartString
+
+// Using Closures
+let smartString = "Hello world!"
+    .font(.boldSystemFont(ofSize: 30))
+    .color(.blue
     .shadow(SmartShadow()
 )
 
