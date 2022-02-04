@@ -1,4 +1,5 @@
-# SmartNet
+# SmartString
+
 A powerful and small library that will allow the creation of complex String Styles. Provides also an easy way to handle **TAPPING** on each substring!!
 
 
