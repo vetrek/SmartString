@@ -97,6 +97,7 @@ let smartString = "Hello "
     .onTap { string in
         print(string) // This will print "world" when tapping the substring "world" within the label
     }
++ "!"
     
 label.smartString = smartString
 ```
