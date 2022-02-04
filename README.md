@@ -12,16 +12,17 @@ let smartString = "Hello world!"
     .color(.blue)
     .underline()
     .shadow(SmartShadow()
-)
+
 
 label.smartString = smartString
 
 // Using Closures
+
 let smartString = "Hello world!"
-    .font(.boldSystemFont(ofSize: 30))
-    .color(.blue
-    .shadow(SmartShadow()
-)
+    .font { boldSystemFont(ofSize: 30) }
+    .color { .blue }
+    .shadow { .default }
+
 
 label.smartString = smartString
 ```
