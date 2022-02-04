@@ -16,7 +16,7 @@ label.smartString = smartString
 ```
 
 Result
-<img src="DocsAssets/example_1.png" alt="" width=352/>
+<img src="DocsAssets/example_1.png" alt="" width=200/>
 
 Using a predefined Style
 ```swift
@@ -35,7 +35,7 @@ label.smartString = "Hello world!".style(style)
 
 Result
 
-<img src="DocsAssets/example_2.png" alt="" width=352 height=80/>
+<img src="DocsAssets/example_2.png" alt="" width=200/>
 
 String style interpolation
 ```swift
@@ -54,4 +54,4 @@ label.smartString = smartString
 
 Result
 
-<img src="Documentation_Assests/example_3.png" alt="" width=400px/>
+<img src="Documentation_Assests/example_3.png" width=200/>
