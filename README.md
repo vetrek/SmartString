@@ -13,16 +13,15 @@ let smartString = "Hello world!"
     .underline()
     .shadow(SmartShadow()
 
-
 label.smartString = smartString
 
 // Using Closures
 
 let smartString = "Hello world!"
-    .font { boldSystemFont(ofSize: 30) }
+    .font { .boldSystemFont(ofSize: 30) }
     .color { .blue }
     .shadow { .default }
-
+    .underline()
 
 label.smartString = smartString
 ```
@@ -115,9 +114,3 @@ label.smartString = smartString
 Result
 
 <img src="DocsAssets/example_5.png" width=200/>
-
-
-
-
-
-
