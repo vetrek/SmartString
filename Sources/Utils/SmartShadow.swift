@@ -14,9 +14,9 @@ public struct SmartShadow {
     public var color: UIColor
     
     public init(
-        offset: CGSize = .init(width: 1, height: 1),
-        radius: CGFloat = 2,
-        color: UIColor = .black
+        offset: CGSize,
+        radius: CGFloat,
+        color: UIColor
     ) {
         self.offset = offset
         self.radius = radius
@@ -29,5 +29,9 @@ public struct SmartShadow {
         shadow.shadowBlurRadius = radius
         shadow.shadowColor = color
         return shadow
+    }
+    
+    public static var `default`: SmartShadow {
+        .init(offset: .init(width: 1, height: 1), radius: 3, color: .black)
     }
 }

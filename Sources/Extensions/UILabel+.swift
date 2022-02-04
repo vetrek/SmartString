@@ -18,6 +18,17 @@ public extension UILabel {
         set {
             attributedText = newValue?.attributedText
             UILabel.smartString[self] = newValue
+            
+            if let smartString = smartString,
+               smartString.tappableRanges.isEmpty == false {
+                isUserInteractionEnabled = true
+                addGestureRecognizer(
+                    UITapGestureRecognizer(
+                        target: newValue,
+                        action: #selector(smartString.labelDidTap)
+                    )
+                )
+            } 
         }
     }
 }

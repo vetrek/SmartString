@@ -8,10 +8,13 @@
 import Foundation
 import UIKit
 
+public typealias StringClosure = (String) -> Void
+
 public final class SmartString: SmartStringable {
     var attributedText: NSMutableAttributedString!
+    var tappableRanges: [NSRange: StringClosure] = [:]
     
-    init(string: String) {
+    public init(string: String) {
         self.attributedText = NSMutableAttributedString(string: string)
     }
     
@@ -29,9 +32,64 @@ public final class SmartString: SmartStringable {
     }
     
     public static func + (lhs: SmartString, rhs: SmartString) -> SmartString {
+        if let tappableRange = rhs.tappableRanges.first {
+            let range = lhs.tappableRanges.isEmpty ? NSMakeRange(0, tappableRange.key.length) : NSMakeRange(lhs.length, tappableRange.key.length)
+            
+            lhs.tappableRanges[range] = tappableRange.value
+        }
         lhs.append(smartString: rhs)
         return lhs
     }
+    
+    @objc func labelDidTap(gesture: UITapGestureRecognizer) {
+        guard let label = gesture.view as? UILabel else { return }
+        for tappableRange in tappableRanges {
+            guard
+                gesture.didTapAttributedTextInLabel(label: label, inRange: tappableRange.key)
+            else { continue }
+            
+            let string = attributedText.attributedSubstring(from: tappableRange.key).string
+            tappableRange.value(string)
+            return 
+        }
+    }
+}
+
+extension UITapGestureRecognizer {
+    
+    func didTapAttributedTextInLabel(label: UILabel, inRange targetRange: NSRange) -> Bool {
+        // Create instances of NSLayoutManager, NSTextContainer and NSTextStorage
+        let layoutManager = NSLayoutManager()
+        let textContainer = NSTextContainer(size: CGSize.zero)
+        let textStorage = NSTextStorage(attributedString: label.attributedText!)
+        
+        // Configure layoutManager and textStorage
+        layoutManager.addTextContainer(textContainer)
+        textStorage.addLayoutManager(layoutManager)
+        
+        // Configure textContainer
+        textContainer.lineFragmentPadding = 0.0
+        textContainer.lineBreakMode = label.lineBreakMode
+        textContainer.maximumNumberOfLines = label.numberOfLines
+        let labelSize = label.bounds.size
+        textContainer.size = labelSize
+        
+        // Find the tapped character location and compare it to the specified range
+        let locationOfTouchInLabel = self.location(in: label)
+        let textBoundingBox = layoutManager.usedRect(for: textContainer)
+        let textContainerOffset = CGPoint(
+            x: (labelSize.width - textBoundingBox.size.width) * 0.5 - textBoundingBox.origin.x,
+            y: (labelSize.height - textBoundingBox.size.height) * 0.5 - textBoundingBox.origin.y
+        )
+        let locationOfTouchInTextContainer = CGPoint(
+            x: locationOfTouchInLabel.x - textContainerOffset.x,
+            y: locationOfTouchInLabel.y - textContainerOffset.y
+        )
+        let indexOfCharacter = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        
+        return NSLocationInRange(indexOfCharacter, targetRange)
+    }
+    
 }
 
 // MARK: - Internal Properties
@@ -80,6 +138,16 @@ public extension SmartString {
         color(closure())
     }
     
+    @discardableResult
+    func background(_ color: UIColor) -> SmartString {
+        addAttribute(key: .backgroundColor, value: color)
+    }
+    
+    @discardableResult
+    func background(closure: () -> UIColor) -> SmartString {
+        background(closure())
+    }
+    
     // MARK: - Font
     
     @discardableResult
@@ -92,14 +160,27 @@ public extension SmartString {
         font(closure())
     }
     
-    // MARK: - Shadow
+    @discardableResult
+    func underline() -> SmartString {
+        addAttribute(key: .underlineStyle, value: NSUnderlineStyle.single.rawValue)
+    }
     
     /// To work you must have set a font prior to this. Otherwise there is not Font to convert to bold
     /// - Returns: SmartString instance
-    @discardableResult func toBold() -> SmartString {
+    @discardableResult func bold() -> SmartString {
         let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
         if let font = attributes[NSAttributedString.Key.font] as? UIFont {
             let bold = font.bold()
+            addAttribute(key: .font, value: bold)
+        }
+        return self
+    }
+    
+    
+    @discardableResult func italic() -> SmartString {
+        let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
+        if let font = attributes[NSAttributedString.Key.font] as? UIFont {
+            let bold = font.italic()
             addAttribute(key: .font, value: bold)
         }
         return self
@@ -118,6 +199,23 @@ public extension SmartString {
         shadow(closure())
     }
     
+    // MARK: - Link
+    
+    @discardableResult
+    func link(_ url: URL) -> SmartString {
+        addAttribute(key: .link, value: url)
+    }
+    
+    func link(closure: () -> URL) -> SmartString {
+        link(closure())
+    }
+    
+    // MARK: - Tap Handler
+    
+    func onTap(closure: @escaping (String) -> Void) -> SmartString {
+        tappableRanges[completeRange] = closure
+        return self
+    }
 }
 
 extension SmartString {
