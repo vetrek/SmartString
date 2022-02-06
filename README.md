@@ -9,6 +9,7 @@ It also allows the registration of Tap Getures handlers on specific substrings.
 - [x] Easily chain Styles + Strings 
 - [x] Create and store predefined reusable Styles
 - [x] Substrings Tap Gestures handlers
+- [x] Ideal for anyone who builds UI from code 
 
 ## Example
 
