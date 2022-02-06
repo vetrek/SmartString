@@ -1,7 +1,14 @@
 # SmartString
 
-A powerful and small library that will allow the creation of complex String Styles. Provides also an easy way to handle **TAPPING** on each substring!
+Powerful and small library that will allow you to create complex attributed strings. Easily Chain Strings and SmartStrings to create exactly the desired Style.
+It also allows the registration of Tap Getures handlers on specific substrings.
 
+## Features
+
+- [x] Powerful and intuitive APIs
+- [x] Easily chain Styles + Strings 
+- [x] Create and store predefined reusable Styles
+- [x] Substrings Tap Gestures handlers
 
 ## Example
 
