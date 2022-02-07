@@ -1,7 +1,6 @@
 # SmartString
 
-Powerful and small library that will allow you to create complex attributed strings. Easily Chain Strings and SmartStrings to create exactly the desired Style.
-It also allows the registration of Tap Getures handlers on specific substrings.
+Powerful and small library written in **Swift** that will allow you to create complex attributed strings. Easily chain Strings + SmartStrings to create the perfect style, and register substrings Tap Getures handlers.
 
 ## Features
 
