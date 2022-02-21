@@ -11,7 +11,6 @@ import SmartString
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-                
         let smartString = "Hello "
             .font { .systemFont(ofSize: 18) }
             .onTap { string in

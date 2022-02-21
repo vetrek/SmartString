@@ -18,6 +18,10 @@ public final class SmartString: SmartStringable {
         self.attributedText = NSMutableAttributedString(string: string)
     }
     
+    public init(attributedString: NSAttributedString) {
+        self.attributedText = NSMutableAttributedString(attributedString: attributedString)
+    }
+    
     func append(string: String) {
         attributedText.append(NSAttributedString(string: string))
     }
@@ -85,7 +89,9 @@ extension UITapGestureRecognizer {
             x: locationOfTouchInLabel.x - textContainerOffset.x,
             y: locationOfTouchInLabel.y - textContainerOffset.y
         )
-        let indexOfCharacter = layoutManager.characterIndex(for: locationOfTouchInTextContainer, in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
+        let indexOfCharacter = layoutManager.characterIndex(
+            for: locationOfTouchInTextContainer,
+               in: textContainer, fractionOfDistanceBetweenInsertionPoints: nil)
         
         return NSLocationInRange(indexOfCharacter, targetRange)
     }
