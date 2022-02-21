@@ -182,12 +182,11 @@ public extension SmartString {
         return self
     }
     
-    
     @discardableResult func italic() -> SmartString {
         let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
         if let font = attributes[NSAttributedString.Key.font] as? UIFont {
-            let bold = font.italic()
-            addAttribute(key: .font, value: bold)
+            let italic = font.italic()
+            addAttribute(key: .font, value: italic)
         }
         return self
     }

@@ -7,7 +7,6 @@ Pod::Spec.new do |s|
   s.author   = { 'Valerio Sebastianelli' => 'valerio.alsebas@gmail.com' } 
   s.source    = { :git => 'https://github.com/vetrek/SmartString.git', :tag => s.version }
   s.ios.deployment_target = '12.0'
-  s.osx.deployment_target = '10.15'
   s.swift_versions = ['5.1', '5.2', '5.3']
   s.source_files = 'Sources/**/*.swift'
 end
