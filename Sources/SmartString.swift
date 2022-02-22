@@ -37,7 +37,7 @@ public final class SmartString: SmartStringable {
     
     public static func + (lhs: SmartString, rhs: SmartString) -> SmartString {
         if let tappableRange = rhs.tappableRanges.first {
-            let range = lhs.tappableRanges.isEmpty ? NSMakeRange(0, tappableRange.key.length) : NSMakeRange(lhs.length, tappableRange.key.length)
+            let range = NSMakeRange(lhs.length, tappableRange.key.length)
             
             lhs.tappableRanges[range] = tappableRange.value
         }

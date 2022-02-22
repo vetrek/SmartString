@@ -11,20 +11,19 @@ import SmartString
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        let smartString = "Hello "
-            .font { .systemFont(ofSize: 18) }
-            .onTap { string in
-                print(string)
-            }
-        + "world"
-            .color(.red)
-            .bold()
-            .onTap { string in
-                print(string)
-            }
-        + "!"
+        let smartString = "h".bold().onTap {
+            print($0)
+        }
+        + "\ne".onTap {
+            print($0)
+        }
+        + "\nl"
+        + "\nl".onTap {
+            print($0)
+        }
         
         let label = UILabel()
+        label.font = .systemFont(ofSize: 17)
         label.smartString = smartString
         label.sizeToFit()
         label.numberOfLines = 0
