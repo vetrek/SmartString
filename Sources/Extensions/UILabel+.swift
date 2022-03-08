@@ -31,4 +31,16 @@ public extension UILabel {
             } 
         }
     }
+    
+    
+    private static var framesetterLock: NSLock = .init()
+    
+    var flushFactor: CGFloat {
+        switch textAlignment {
+        case .center: return 0.5
+        case .right: return 1.0
+        default: return 0.0
+        }
+    }
+
 }
