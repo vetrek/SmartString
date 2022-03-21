@@ -15,6 +15,9 @@ class ViewController: UIViewController {
         + "contatta il tuo "
             .font(UIFont(name: "HelveticaNeue-Bold", size: 17)!)
             .bold()
+            .underline()
+            .italic()
+            .shadow(.default)
         + "servizio clienti"
             .font(UIFont(name: "HelveticaNeue-Bold", size: 17)!)
             .bold()
@@ -26,7 +29,7 @@ class ViewController: UIViewController {
         
         let label = UILabel()
         label.font = .systemFont(ofSize: 17)
-        label.smartString = smartString
+        label.smartString = smartString.color(UIColor.brown)
         label.sizeToFit()
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -37,18 +40,6 @@ class ViewController: UIViewController {
         NSLayoutConstraint.activate([
             label.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
             label.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
-        ])
-        
-        let _view = UIView()
-        _view.backgroundColor = .green
-        _view.translatesAutoresizingMaskIntoConstraints = false
-        self.view.addSubview(_view)
-        
-        NSLayoutConstraint.activate([
-            _view.topAnchor.constraint(equalTo: view.topAnchor, constant: 458),
-            _view.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            _view.heightAnchor.constraint(equalToConstant: 20),
-            _view.widthAnchor.constraint(equalToConstant: 112.5)
         ])
     }
 }

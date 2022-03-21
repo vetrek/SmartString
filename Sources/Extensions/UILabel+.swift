@@ -9,6 +9,7 @@ import Foundation
 import UIKit
 
 public extension UILabel {
+    
     private static let smartString = AssociatedObject<SmartString>()
     
     var smartString: SmartString? {

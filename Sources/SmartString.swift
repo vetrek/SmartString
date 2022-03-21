@@ -297,9 +297,15 @@ public extension SmartString {
 
 extension SmartString {
     func removeAttribute(key: NSAttributedString.Key) {
-        var attributes = attributedText.attributes(at: 0, effectiveRange: nil)
-        attributes.removeValue(forKey: key)
-        attributedText.setAttributes(attributes, range: completeRange)
+        attributedText.enumerateAttribute(
+            key,
+            in: completeRange,
+            options: [],
+            using: { value, range, _ in
+                guard value != nil else { return }
+                attributedText.removeAttribute(key, range: range)
+            }
+        )
     }
     
     @discardableResult
