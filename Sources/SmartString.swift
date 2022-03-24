@@ -59,117 +59,6 @@ public final class SmartString: SmartStringable {
     }
 }
 
-extension UITapGestureRecognizer {
-    
-    func didTapAttributedTextInLabel(
-        label: UILabel,
-        inRange targetRange: NSRange
-    ) -> Bool {
-        let point = self.location(in: label)
-        
-        guard
-            let font = label.font,
-            let attributedText = label.attributedText,
-            label.bounds.contains(point)
-        else { return false }
-        
-        let txtRect = label.textRect(
-            forBounds: label.bounds,
-            limitedToNumberOfLines: label.numberOfLines
-        )
-        guard txtRect.contains(point) else { return false }
-        
-        var relativePoint = CGPoint(
-            x: point.x - txtRect.origin.x,
-            y: point.y - txtRect.origin.y
-        )
-        relativePoint = CGPoint(
-            x: relativePoint.x,
-            y: txtRect.size.height - relativePoint.y
-        )
-       
-        // --
-        
-        let attStr = NSMutableAttributedString(attributedString: attributedText)
-        attStr.enumerateAttribute(
-            .font,
-            in: NSRange(location: 0, length: attStr.length),
-            options: [],
-            using: { value, range, _ in
-                if value == nil {
-                    attStr.addAttribute(
-                        .font,
-                        value: font,
-                        range: range
-                    )
-                }
-            }
-        )
-        
-        let frameSetter = CTFramesetterCreateWithAttributedString(attStr as CFAttributedString)
-        let path = UIBezierPath(
-            rect: CGRect(
-                x: 0,
-                y: 0,
-                width: txtRect.size.width,
-                height: attStr.computeStringHeight(width: txtRect.size.width)
-            )
-        )
-        let frame = CTFramesetterCreateFrame(
-            frameSetter,
-            CFRangeMake(0, attStr.length),
-            path.cgPath,
-            nil
-        )
-        
-        guard let lines = CTFrameGetLines(frame) as? [CTLine] else {
-            return false
-        }
-        
-        // --
-        
-        let lineCount = label.numberOfLines > 0 ? min(label.numberOfLines, lines.count) : lines.count
-        guard lineCount > 0 else {
-            return false
-        }
-        
-        var index = NSNotFound
-        var lineOrigins: [CGPoint] = .init(repeating: .zero, count: lineCount)
-        CTFrameGetLineOrigins(frame, CFRange(location: 0, length: lineCount), &lineOrigins)
-        
-        for lineIndex in 0..<lineOrigins.count {
-            var lineOrigin = lineOrigins[lineIndex]
-            let line = lines[lineIndex]
-            var ascent: CGFloat = 0.0
-            var descent: CGFloat = 0.0
-            var leading: CGFloat = 0.0
-            
-            let width = CGFloat(CTLineGetTypographicBounds(line, &ascent, &descent, &leading))
-            let yMin = floor(lineOrigin.y - descent)
-            let yMax = ceil(lineOrigin.y + ascent)
-            
-            let penOffset = CGFloat(CTLineGetPenOffsetForFlush(line, label.flushFactor, Double(txtRect.width)))
-            lineOrigin.x = penOffset
-            
-            // if we've already passed the point, stop
-            guard relativePoint.y <= yMax else {
-                break
-            }
-            
-            guard relativePoint.y >= yMin,
-                  relativePoint.x >= lineOrigin.x && relativePoint.x <= lineOrigin.x + width
-            else { continue }
-            
-            let position = CGPoint(x: relativePoint.x - lineOrigin.x, y: relativePoint.y - lineOrigin.y)
-            index = CTLineGetStringIndexForPosition(line, position)
-            break
-        }
-        
-        return NSLocationInRange(index, targetRange)
-    }
-    
-}
-
 // MARK: - Internal Properties
 
 extension SmartString {
@@ -177,7 +66,7 @@ extension SmartString {
         attributedText.length
     }
     
-    var completeRange: NSRange {
+    var fullRange: NSRange {
         NSMakeRange(0, length)
     }
 }
@@ -290,7 +179,7 @@ public extension SmartString {
     // MARK: - Tap Handler
     
     func onTap(closure: @escaping (String) -> Void) -> SmartString {
-        tappableRanges[completeRange] = closure
+        tappableRanges[fullRange] = closure
         return self
     }
 }
@@ -299,7 +188,7 @@ extension SmartString {
     func removeAttribute(key: NSAttributedString.Key) {
         attributedText.enumerateAttribute(
             key,
-            in: completeRange,
+            in: fullRange,
             options: [],
             using: { value, range, _ in
                 guard value != nil else { return }
@@ -311,7 +200,25 @@ extension SmartString {
     @discardableResult
     func addAttribute(key: NSAttributedString.Key, value: Any) -> SmartString {
         removeAttribute(key: key)
-        attributedText.addAttributes([key: value], range: completeRange)
+        attributedText.addAttributes([key: value], range: fullRange)
         return self
+    }
+}
+
+// MARK: - SmartString + Label
+extension SmartString {
+    /// Add the label default font if needed
+    func addMissingFontIfNeeded(label: UILabel) {
+        guard let labelFont = label.font else { return }
+        attributedText.enumerateAttributes(
+            in: fullRange,
+            options: []
+        ) { [weak self] attr, range, asd in
+            guard !attr.contains(where: ({ $0.key == .font })) else { return }
+            self?.attributedText.addAttributes(
+                [.font: labelFont],
+                range: range
+            )
+        }
     }
 }

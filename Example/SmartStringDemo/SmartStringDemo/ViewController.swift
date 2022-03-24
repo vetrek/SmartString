@@ -29,11 +29,10 @@ class ViewController: UIViewController {
         
         let label = UILabel()
         label.font = .systemFont(ofSize: 17)
-        label.smartString = smartString.color(UIColor.brown)
+        label.smartString = "smartString.color(UIColor.brown)".color(.red)
         label.sizeToFit()
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .yellow
         view.addSubview(label)
         label.center(in: view)
         
