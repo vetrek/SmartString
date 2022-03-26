@@ -37,7 +37,7 @@ extension String: SmartStringable {
     }
     
     public func background(_ color: UIColor) -> SmartString {
-        SmartString(string: self).color(color)
+        SmartString(string: self).background(color)
     }
     
     public func background(closure: () -> UIColor) -> SmartString {
