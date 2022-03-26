@@ -46,6 +46,6 @@ extension NSAttributedString {
             height += h
         }
         
-        return height
+        return height + 1
     }
 }

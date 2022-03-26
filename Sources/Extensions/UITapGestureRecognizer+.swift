@@ -36,7 +36,8 @@ extension UITapGestureRecognizer {
             x: relativePoint.x,
             y: txtRect.size.height - relativePoint.y
         )
-        
+
+        print("Relative point", relativePoint)
         // --
         
         let attStr = NSMutableAttributedString(attributedString: attributedText)
@@ -70,7 +71,7 @@ extension UITapGestureRecognizer {
             path.cgPath,
             nil
         )
-        
+
         guard let lines = CTFrameGetLines(frame) as? [CTLine] else {
             return false
         }
@@ -94,8 +95,8 @@ extension UITapGestureRecognizer {
             var leading: CGFloat = 0.0
             
             let width = CGFloat(CTLineGetTypographicBounds(line, &ascent, &descent, &leading))
-            let yMin = floor(lineOrigin.y - descent)
-            let yMax = ceil(lineOrigin.y + ascent)
+            let yMin = floor(lineOrigin.y - ascent)
+            let yMax = ceil(lineOrigin.y + descent)
             
             let penOffset = CGFloat(CTLineGetPenOffsetForFlush(line, label.flushFactor, Double(txtRect.width)))
             lineOrigin.x = penOffset
