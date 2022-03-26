@@ -5,7 +5,6 @@
 //  Created by Valerio Sebastianelli on 1/31/22.
 //
 
-import Foundation
 import UIKit
 
 public typealias StringClosure = (String) -> Void
@@ -134,24 +133,33 @@ public extension SmartString {
     
     /// To work you must have set a font prior to this. Otherwise there is not Font to convert to bold
     /// - Returns: SmartString instance
-    @discardableResult func bold() -> SmartString {
+    @discardableResult
+    func bold() -> SmartString {
+        guard attributedText.length > 0 else { return self }
         let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
         if let font = attributes[NSAttributedString.Key.font] as? UIFont {
             let bold = font.bold()
             addAttribute(key: .font, value: bold)
         }
+        else {
+            print("SmartString 🔵", "Bold can only be applied if the SmartString has an associated Font")
+        }
         return self
     }
     
-    @discardableResult func italic() -> SmartString {
+    @discardableResult
+    func italic() -> SmartString {
+        guard attributedText.length > 0 else { return self }
         let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
         if let font = attributes[NSAttributedString.Key.font] as? UIFont {
             let italic = font.italic()
             addAttribute(key: .font, value: italic)
         }
+        else {
+            print("SmartString 🔵", "italic can only be applied if the SmartString has an associated Font")
+        }
         return self
     }
-    
     
     // MARK: - Shadow
     
@@ -170,6 +178,10 @@ public extension SmartString {
     @discardableResult
     func link(_ url: URL) -> SmartString {
         addAttribute(key: .link, value: url)
+        return onTap { _ in
+            guard UIApplication.shared.canOpenURL(url) else { return }
+            UIApplication.shared.open(url)
+        }
     }
     
     func link(closure: () -> URL) -> SmartString {
@@ -202,23 +214,5 @@ extension SmartString {
         removeAttribute(key: key)
         attributedText.addAttributes([key: value], range: fullRange)
         return self
-    }
-}
-
-// MARK: - SmartString + Label
-extension SmartString {
-    /// Add the label default font if needed
-    func addMissingFontIfNeeded(label: UILabel) {
-        guard let labelFont = label.font else { return }
-        attributedText.enumerateAttributes(
-            in: fullRange,
-            options: []
-        ) { [weak self] attr, range, asd in
-            guard !attr.contains(where: ({ $0.key == .font })) else { return }
-            self?.attributedText.addAttributes(
-                [.font: labelFont],
-                range: range
-            )
-        }
     }
 }

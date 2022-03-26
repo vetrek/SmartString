@@ -11,28 +11,28 @@ import SmartString
 class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
-        let smartString = "Se sono passati piu di 15 giorni dalla richiesta e non hai ancora ricevuto il pin, "
-        + "contatta il tuo "
-            .font(UIFont(name: "HelveticaNeue-Bold", size: 17)!)
-            .bold()
-            .underline()
-            .italic()
-            .shadow(.default)
-        + "servizio clienti"
-            .font(UIFont(name: "HelveticaNeue-Bold", size: 17)!)
-            .bold()
-            .underline()
-            .onTap { str in
-                print(str)
-            }
-        + "."
-        
         let label = UILabel()
-        label.font = .systemFont(ofSize: 17)
-        label.smartString = "smartString.color(UIColor.brown)".color(.red)
+
+//        label.smartString = "a".font(.systemFont(ofSize: 12))
+//        + " Bold".font(UIFont(name: "HelveticaNeue-Bold", size: 17)!)
+//        + " normal".onTap { str in
+//            label.smartString = "ciao".smartString.onTap(closure: { _ in
+//                print(label.font)
+//            })
+//        }
+
+        label.smartString = "google\n"
+            .link(URL(string: "https://google.com")!)
+            .font(.systemFont(ofSize: 43))
+        + "ciao".onTap(closure: { str in
+            print(str)
+        })
+//            .color(.red)
+
         label.sizeToFit()
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.backgroundColor = .green
         view.addSubview(label)
         label.center(in: view)
         
@@ -44,14 +44,17 @@ class ViewController: UIViewController {
 }
 
 extension SmartStringStyle {
-    static let title = SmartStringStyle(color: .black, font: .systemFont(ofSize: 30))
-    static let body = SmartStringStyle(color: .blue, font: .systemFont(ofSize: 20))
+    static let title = SmartStringStyle {
+        $0.font = .systemFont(ofSize: 30)
+    }
+//    static let title = SmartStringStyle(color: .black, font: .systemFont(ofSize: 30))
+//    static let body = SmartStringStyle(color: .blue, font: .systemFont(ofSize: 20))
 }
 
 extension String {
-    var title: SmartString {
-        style(.title)
-    }
+//    var title: SmartString {
+//        style(.title)
+//    }
 }
 
 extension UIView {

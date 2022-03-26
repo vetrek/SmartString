@@ -5,7 +5,6 @@
 //  Created by Valerio Sebastianelli on 2/3/22.
 //
 
-import Foundation
 import UIKit
 
 public extension UILabel {
@@ -14,24 +13,24 @@ public extension UILabel {
     
     var smartString: SmartString? {
         get {
-            return UILabel.smartString[self]
+            UILabel.smartString[self]
         }
         set {
-            newValue?.addMissingFontIfNeeded(label: self)
-            
             attributedText = newValue?.attributedText
             UILabel.smartString[self] = newValue
             
-            if let smartString = smartString,
-               smartString.tappableRanges.isEmpty == false {
-                isUserInteractionEnabled = true
-                addGestureRecognizer(
-                    UITapGestureRecognizer(
-                        target: newValue,
-                        action: #selector(smartString.labelDidTap)
-                    )
+            guard
+                let smartString = smartString,
+                !smartString.tappableRanges.isEmpty
+            else { return }
+            
+            isUserInteractionEnabled = true
+            addGestureRecognizer(
+                UITapGestureRecognizer(
+                    target: newValue,
+                    action: #selector(smartString.labelDidTap)
                 )
-            } 
+            )
         }
     }
     
@@ -45,4 +44,5 @@ public extension UILabel {
             return 0.0
         }
     }
+
 }

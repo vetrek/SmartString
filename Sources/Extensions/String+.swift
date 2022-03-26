@@ -5,7 +5,6 @@
 //  Created by Valerio Sebastianelli on 2/3/22.
 //
 
-import Foundation
 import UIKit
 
 // MARK: - Public Properties
