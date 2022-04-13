@@ -27,6 +27,7 @@ public final class SmartString: SmartStringable {
             self.attributedText = NSMutableAttributedString(string: string)
             return
         }
+        self.tappableRanges = xmlSmartString.tappableRanges
         self.attributedText = xmlSmartString.attributedText
     }
     

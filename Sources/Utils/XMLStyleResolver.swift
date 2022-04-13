@@ -6,7 +6,6 @@
 //
 
 import Foundation
-import libxml2 
 
 extension String {
     var escaped: String {
