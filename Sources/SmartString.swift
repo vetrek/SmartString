@@ -13,8 +13,21 @@ public final class SmartString: SmartStringable {
     var attributedText: NSMutableAttributedString!
     var tappableRanges: [NSRange: StringClosure] = [:]
     
-    public init(string: String) {
-        self.attributedText = NSMutableAttributedString(string: string)
+    var string: String { attributedText.string }
+    
+    init() {
+        self.attributedText = NSMutableAttributedString(string: "")
+    }
+    
+    public init(string: String, hasXML: Bool = false) {
+        guard
+            hasXML,
+            let xmlSmartString = try? XMLStringParser(string: string).parse()
+        else {
+            self.attributedText = NSMutableAttributedString(string: string)
+            return
+        }
+        self.attributedText = xmlSmartString.attributedText
     }
     
     public init(attributedString: NSAttributedString) {
@@ -29,12 +42,12 @@ public final class SmartString: SmartStringable {
         attributedText.append(smartString.attributedText)
     }
     
-    public static func + (lhs: SmartString, rhs: String) -> SmartString {
+    public static func +(lhs: SmartString, rhs: String) -> SmartString {
         lhs.append(string: rhs)
         return lhs
     }
     
-    public static func + (lhs: SmartString, rhs: SmartString) -> SmartString {
+    public static func +(lhs: SmartString, rhs: SmartString) -> SmartString {
         if let tappableRange = rhs.tappableRanges.first {
             let range = NSMakeRange(lhs.length, tappableRange.key.length)
             
@@ -42,6 +55,15 @@ public final class SmartString: SmartStringable {
         }
         lhs.append(smartString: rhs)
         return lhs
+    }
+    
+    public static func +=(lhs: SmartString, rhs: SmartString) {
+        if let tappableRange = rhs.tappableRanges.first {
+            let range = NSMakeRange(lhs.length, tappableRange.key.length)
+            
+            lhs.tappableRanges[range] = tappableRange.value
+        }
+        lhs.append(smartString: rhs)
     }
     
     @objc func labelDidTap(gesture: UITapGestureRecognizer) {
@@ -77,16 +99,28 @@ public extension SmartString {
     
     @discardableResult
     func style(_ style: SmartStringStyle) -> SmartString {
-        if let color = style.color {
-            self.color(color)
-        }
-        
         if let font = style.font {
             self.font(font)
         }
         
+        if let color = style.color {
+            self.color(color)
+        }
+        
+        if let backgroundColor = style.backgroundColor {
+            self.background(backgroundColor)
+        }
+        
         if let shadow = style.shadow {
             self.shadow(shadow)
+        }
+        
+        if style.underlined {
+            self.underline()
+        }
+        
+        if let url = style.link {
+            self.link(url)
         }
         
         return self

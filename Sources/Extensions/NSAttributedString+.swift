@@ -8,6 +8,12 @@
 import Foundation
 import UIKit
 
+public extension NSAttributedString {
+    var smartString: SmartString {
+        SmartString(attributedString: self)
+    }
+}
+
 extension NSAttributedString {
     func computeStringHeight(width: CGFloat) -> CGFloat {
         var height: CGFloat = 0

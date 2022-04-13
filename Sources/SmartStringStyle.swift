@@ -13,6 +13,9 @@ public struct SmartStringStyle {
     public var backgroundColor: UIColor?
     public var font: UIFont?
     public var shadow: SmartShadow?
+    public var link: URL?
+    public var onTap: ((String) -> Void)?
+    public var underlined: Bool = false
     
     public init(completion: (inout Self) -> Void) {
         var style = SmartStringStyle()

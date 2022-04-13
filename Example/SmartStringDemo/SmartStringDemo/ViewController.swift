@@ -21,18 +21,12 @@ class ViewController: UIViewController {
 //            })
 //        }
 
-        label.smartString = "google\n"
-            .link(URL(string: "https://google.com")!)
-            .font(.systemFont(ofSize: 43))
-        + "ciao".onTap(closure: { str in
-            print(str)
-        })
-//            .color(.red)
+//        label.smartString = "<primary>Hello </primary><secondary>world!</secondary>".smartStringXML
+        label.smartString = "<primary><secondary>Hello </secondary></primary>world!".smartStringXML
 
         label.sizeToFit()
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.backgroundColor = .green
         view.addSubview(label)
         label.center(in: view)
         

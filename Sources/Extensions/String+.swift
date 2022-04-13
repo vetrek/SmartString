@@ -13,6 +13,10 @@ public extension String {
     var smartString: SmartString {
         SmartString(string: self)
     }
+    
+    var smartStringXML: SmartString {
+        SmartString(string: self, hasXML: true)
+    }
 }
 
 // MARK: - Public Methods
