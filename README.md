@@ -6,6 +6,7 @@ Powerful and small library written in **Swift** that will allow you to create co
 
 - [x] Powerful and intuitive APIs
 - [x] Easily chain SmartString + Strings 
+- [x] XML Tagged string styles
 - [x] Tap Gestures handlers directly on substrings
 - [x] Create and store predefined & reusable Styles
 - [x] Ideal for anyone who builds UI from code
