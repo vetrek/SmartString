@@ -122,3 +122,7 @@ label.smartString = smartString
 Result
 
 <img src="DocsAssets/example_5.png" width=200/>
+
+## Author
+
+SmartString is owned and maintained by Valerio Sebastianelli: [valerio.alsebas@gmail.com](mailto:valerio.alsebas@gmail.com)
