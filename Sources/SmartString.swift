@@ -13,7 +13,7 @@ public final class SmartString: SmartStringable {
     var attributedText: NSMutableAttributedString!
     var tappableRanges: [NSRange: StringClosure] = [:]
     
-    var string: String { attributedText.string }
+    public var string: String { attributedText.string }
     
     init() {
         self.attributedText = NSMutableAttributedString(string: "")
@@ -78,6 +78,10 @@ public final class SmartString: SmartStringable {
             tappableRange.value(string)
             return 
         }
+    }
+    
+    public func height(for width: CGFloat) -> CGFloat {
+        attributedText.computeStringHeight(width: width)
     }
 }
 

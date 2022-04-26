@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name      = 'SmartString'
-  s.version   = '1.0.0'
+  s.version   = '1.0.1'
   s.summary   = 'Lightweight String styling library'
   s.homepage  = 'https://github.com/vetrek/SmartString'
   s.license   = { :type => 'MIT', :file => 'LICENSE' }
