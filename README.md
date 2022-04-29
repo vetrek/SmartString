@@ -125,4 +125,4 @@ Result
 
 ## Author
 
-SmartString is owned and maintained by Valerio Sebastianelli: [valerio.alsebas@gmail.com](mailto:valerio.alsebas@gmail.com)
+SmartString is maintained by Valerio Sebastianelli: [valerio.alsebas@gmail.com](mailto:valerio.alsebas@gmail.com)
