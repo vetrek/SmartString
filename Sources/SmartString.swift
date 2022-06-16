@@ -33,6 +33,19 @@ public final class SmartString: SmartStringable {
     
     public init(attributedString: NSAttributedString) {
         self.attributedText = NSMutableAttributedString(attributedString: attributedString)
+        
+        let mutable = NSMutableAttributedString(attributedString: attributedString)
+        let fullRange = NSRange(location: 0, length: mutable.length)
+        mutable.enumerateAttributes(in: fullRange) { value, range, _ in
+            guard
+                value.keys.contains(.link),
+                let url = value[.link] as? URL
+            else { return }
+            tappableRanges[range] = { _ in
+                guard UIApplication.shared.canOpenURL(url) else { return }
+                UIApplication.shared.open(url)
+            }
+        }
     }
     
     func append(string: String) {
