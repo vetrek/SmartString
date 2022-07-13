@@ -19,7 +19,7 @@ let smartString = "Hello world!"
     .font(.boldSystemFont(ofSize: 30))
     .color(.blue)
     .underline()
-    .shadow(SmartShadow()
+    .shadow(SmartShadow())
     .onTap { string in
         print(string) // This will print "Hello world!"
     }
