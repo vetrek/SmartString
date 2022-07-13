@@ -141,6 +141,10 @@ public extension SmartString {
             self.link(url)
         }
         
+        if let onTap = style.onTap {
+            self.onTap(closure: onTap)
+        }
+        
         return self
     }
     
@@ -242,6 +246,7 @@ public extension SmartString {
     
     // MARK: - Tap Handler
     
+    @discardableResult
     func onTap(closure: @escaping (String) -> Void) -> SmartString {
         tappableRanges[fullRange] = closure
         return self
