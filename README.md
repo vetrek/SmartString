@@ -20,6 +20,9 @@ let smartString = "Hello world!"
     .color(.blue)
     .underline()
     .shadow(SmartShadow()
+    .onTap { string in
+        print(string) // This will print "Hello world!"
+    }
 
 label.smartString = smartString
 
