@@ -23,7 +23,7 @@ class ViewController: UIViewController {
         
 //        label.smartString = "<primary>Hello </primary><secondary>world!</secondary>".smartStringXML
         
-        let xmlString = "Hello ".tag(with: .primary) + "world!".tag(with: .secondary)
+        let xmlString = "Hello ".tag(XMLStringStyles.primary) + "world!".tag(XMLStringStyles.secondary)
         label.smartString = xmlString.smartStringXML
 
         label.sizeToFit()

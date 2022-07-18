@@ -25,7 +25,7 @@
 import Foundation
 import SmartString
 
-enum XMLStringStyles: String, CaseIterable {
+enum XMLStringStyles: String, CaseIterable, SmartStringStylable {
     case primary
     case secondary
     case body

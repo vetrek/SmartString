@@ -25,6 +25,10 @@
 import Foundation
 import UIKit
 
+public protocol SmartStringStylable: RawRepresentable {
+    var style: SmartStringStyle { get }
+}
+
 public struct SmartStringStyle {
     public var color: UIColor?
     public var backgroundColor: UIColor?
