@@ -62,17 +62,7 @@ Result
 
 ### String + SmartString interpolation
 ```swift
-let smartString = "Hello"
-    .font(.boldSystemFont(ofSize: 30))
-    .color(.green)
-    .underline()
-    .italic()
-    .shadow(.default)
-+ " world!"
-    .font(.systemFont(ofSize: 24))
-    .color(.purple)
-    
-label.smartString = smartString
+label.smartString = "Hello" + " world!".font(.systemFont(ofSize: 24)).color(.purple)
 ```
 
 Result
@@ -87,17 +77,7 @@ let style1 = SmartStringStyle { style in
     style.shadow = .default
 }
         
-let style2 = SmartStringStyle { style in 
-    style.color = .purple
-    style.font = .systemFont(ofSize: 24)
-}
-        
-let smartString = "Hello"
-    .style(style1)
-+ " world!"
-    .style(style2)
-    
-label.smartString = smartString
+label.smartString = "Hello" + " world!".style(style1)
 ```
 
 Result
