@@ -25,7 +25,7 @@
 import Foundation
 import SmartString
 
-enum XMLStrinStyles: String, CaseIterable {
+enum XMLStringStyles: String, CaseIterable, SmartStringStylable {
     case primary
     case secondary
     case body
@@ -57,18 +57,18 @@ enum XMLStrinStyles: String, CaseIterable {
     }
     
     static func setXmlSmartStringStyles() {
-        XMLStrinStyles.allCases.forEach {
+        XMLStringStyles.allCases.forEach {
             SmartStringXMLStyles.styles[$0.rawValue] = $0.style
         }
     }
 }
 
 extension String {
-    func tagged(with style: XMLStrinStyles) -> String {
-        "<\(style.rawValue)>...\(style.rawValue)"
+    func tag(with style: XMLStringStyles) -> String {
+        tag(style)
     }
     
     var title: SmartString {
-        style(XMLStrinStyles.body.style)
+        style(XMLStringStyles.body.style)
     }
 }

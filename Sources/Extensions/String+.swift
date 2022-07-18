@@ -34,6 +34,10 @@ public extension String {
     var smartStringXML: SmartString {
         SmartString(string: self, hasXML: true)
     }
+    
+    func tag<T>(_ tag: T) -> String where T: RawRepresentable, T.RawValue == String {
+        "<\(tag.rawValue)>\(self)</\(tag.rawValue)>"
+    }
 }
 
 // MARK: - Public Methods
