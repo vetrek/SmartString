@@ -43,14 +43,15 @@ Result
 
 ### Predefined Style
 ```swift
-let style = SmartStringStyle(
-    color: .blue,
-    font: .boldSystemFont(ofSize: 30),
-    shadow: SmartShadow(
-    offset: CGSize(width: 2, height: 2),
-    radius: 2,
-    color: .red
-)
+let style = SmartStringStyle { style in
+    style.font = .systemFont(ofSize: 21)
+    style.color = .red
+    style.underlined = true
+    style.shadow = .default
+    style.onTap = { string in
+        print(string)
+    }
+}
 
 label.smartString = "Hello world!".style(style)
 ```
@@ -80,16 +81,16 @@ Result
 
 ### String + SmartString interpolation using predefined Styles
 ```swift
-let style1 = SmartStringStyle(
-    color: .green,
-     font: .boldSystemFont(ofSize: 30),
-   shadow: .default
-)
+let style1 = SmartStringStyle { style in
+    style.color = .green
+    style.font = .boldSystemFont(ofSize: 30)
+    style.shadow = .default
+}
         
-let style2 = SmartStringStyle(
-    color: .purple,
-     font: .systemFont(ofSize: 24)
-)
+let style2 = SmartStringStyle { style in 
+    style.color = .purple
+    style.font = .systemFont(ofSize: 24)
+}
         
 let smartString = "Hello"
     .style(style1)
