@@ -13,7 +13,7 @@ Powerful and small library written in **Swift** that will allow you to create co
 
 ## Example
 
-* Basic
+* ### Usage
 ```swift
 let smartString = "Hello world!"
     .font(.boldSystemFont(ofSize: 30))
@@ -41,7 +41,7 @@ Result
 
 <img src="DocsAssets/example_1.png" alt="" width=200/>
 
-### Predefined Style
+* ### Predefined Style
 ```swift
 let style = SmartStringStyle { style in
     style.font = .systemFont(ofSize: 21)
@@ -60,7 +60,7 @@ Result
 
 <img src="DocsAssets/example_2.png" alt="" width=200/>
 
-### String + SmartString interpolation
+* ### String + SmartString interpolation
 ```swift
 label.smartString = "Hello" + " world!".font(.systemFont(ofSize: 24)).color(.purple)
 ```
@@ -69,7 +69,7 @@ Result
 
 <img src="DocsAssets/example_3.png" width=200/>
 
-### String + SmartString interpolation using predefined Styles
+* ### String + SmartString interpolation using predefined Styles
 ```swift
 let style1 = SmartStringStyle { style in
     style.color = .green
@@ -84,7 +84,7 @@ Result
 
 <img src="DocsAssets/example_4.png" width=200/>
 
-### Label substring Tap Handlers
+* ### Label substring Tap Handlers
 
 ```swift
 let smartString = "Hello "
@@ -106,6 +106,84 @@ label.smartString = smartString
 Result
 
 <img src="DocsAssets/example_5.png" width=200/>
+
+* ### Define style using XML Tags
+
+#### Styles
+```swift
+
+//  XMLStringStyles.swift 
+enum XMLStringStyles: String, CaseIterable, SmartStringStylable {
+    case primary
+    case secondary
+
+    var style: SmartStringStyle {
+        switch self {
+        case .primary:
+            return SmartStringStyle { style in
+                style.font = .boldSystemFont(ofSize: 24)
+                style.color = .blue
+                style.link = URL(string: "https://google.com")
+            }
+        case .secondary:
+            return SmartStringStyle { style in
+                style.font = .boldSystemFont(ofSize: 24)
+                style.color = .black
+                style.backgroundColor = .systemPink
+            }
+        }
+    }
+    
+    /// Associate tags with styles. You should call this function when the app starts running
+    static func setXmlSmartStringStyles() {
+        XMLStringStyles.allCases.forEach {
+            SmartStringXMLStyles.styles[$0.rawValue] = $0.style
+        }
+    }
+
+}
+
+```
+
+#### Associate styles to tags after application launch
+```swift
+//  AppDelegate.swift File
+func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+    // Override point for customization after application launch.
+    
+    // Register styles
+    XMLStringStyles.setXmlSmartStringStyles()
+    
+    return true
+}
+```
+
+#### Usage
+```swift
+// ViewController.Swift File
+
+// Option 1
+label.smartString = "<primary>Hello </primary><secondary>world!</secondary>".smartStringXML
+
+// Option 2, which uses a **tag** method to apply tags
+let xmlString = "Hello ".tag(XMLStringStyles.primary) + "world!".tag(XMLStringStyles.secondary)
+label.smartString = xmlString.smartStringXML
+
+// Option 3, wrap **tag** method in a string extension to have an even cleaner coder
+extension String {
+    func tag(with style: XMLStringStyles) -> String {
+        tag(style)
+    }
+}
+
+let xmlString = "Hello ".tag(with: .primary) + "world!".tag(with: .secondary)
+label.smartString = xmlString.smartStringXML
+
+```
+
+Result
+
+<img src="DocsAssets/example_6.png" width=200/>
 
 ## Author
 
