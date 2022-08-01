@@ -1,7 +1,7 @@
 //
 //  SmartStrings.swift
 //
-//  Copyright (c) 2021 Valerio69 (valerio.alsebas@gmail.com)
+//  Copyright (c) 2021 Vetrek (valerio.alsebas@gmail.com)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -97,22 +97,10 @@ public final class SmartString: SmartStringable {
         lhs.append(smartString: rhs)
     }
     
-    @objc func labelDidTap(gesture: UITapGestureRecognizer) {
-        guard let label = gesture.view as? UILabel else { return }
-        for tappableRange in tappableRanges {
-            guard
-                gesture.didTapAttributedTextInLabel(label: label, inRange: tappableRange.key)
-            else { continue }
-            
-            let string = attributedText.attributedSubstring(from: tappableRange.key).string
-            tappableRange.value(string)
-            return 
-        }
-    }
-    
     public func height(for width: CGFloat) -> CGFloat {
         attributedText.computeStringHeight(width: width)
     }
+    
 }
 
 // MARK: - Internal Properties
@@ -261,6 +249,21 @@ public extension SmartString {
         link(closure())
     }
     
+    // MARK: - Image
+    
+    @discardableResult
+    func appendImage(_ image: UIImage, height: CGFloat = 18) -> SmartString {
+        let attachment = NSTextAttachment()
+        attachment.image = image
+        attachment.setImageHeight(height: height)
+        attributedText.append(NSAttributedString(attachment: attachment))
+        return self
+    }
+    
+    func appendImage(height: CGFloat, closure: () -> UIImage) -> SmartString {
+        appendImage(closure(), height: height)
+    }
+        
     // MARK: - Tap Handler
     
     @discardableResult
@@ -289,4 +292,18 @@ extension SmartString {
         attributedText.addAttributes([key: value], range: fullRange)
         return self
     }
+    
+    @objc func labelDidTap(gesture: UITapGestureRecognizer) {
+        guard let label = gesture.view as? UILabel else { return }
+        for tappableRange in tappableRanges {
+            guard
+                gesture.didTapAttributedTextInLabel(label: label, inRange: tappableRange.key)
+            else { continue }
+            
+            let string = attributedText.attributedSubstring(from: tappableRange.key).string
+            tappableRange.value(string)
+            return
+        }
+    }
+
 }

@@ -1,7 +1,7 @@
 //
 //  File.swift
 //
-//  Copyright (c) 2021 Valerio69 (valerio.alsebas@gmail.com)
+//  Copyright (c) 2021 Vetrek (valerio.alsebas@gmail.com)
 //
 //  Permission is hereby granted, free of charge, to any person obtaining a copy
 //  of this software and associated documentation files (the "Software"), to deal
@@ -43,7 +43,7 @@ public extension String {
 // MARK: - Public Methods
 
 extension String: SmartStringable {
- 
+    
     // MARK: - Style
     
     public func style(_ smartStyle: SmartStringStyle) -> SmartString {
@@ -108,6 +108,16 @@ extension String: SmartStringable {
     
     public func link(closure: () -> URL) -> SmartString {
         SmartString(string: self).link(closure: closure)
+    }
+    
+    // MARK: - Image
+    
+    public func appendImage(_ image: UIImage, height: CGFloat = 18) -> SmartString {
+        SmartString(string: self).appendImage(image, height: height)
+    }
+    
+    public func appendImage(height: CGFloat, closure: () -> UIImage) -> SmartString {
+        SmartString(string: self).appendImage(height: height, closure: closure)
     }
     
     // MARK: - Tap Handler
