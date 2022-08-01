@@ -33,7 +33,7 @@ extension NSTextAttachment {
 
         bounds = CGRect(
             x: bounds.origin.x,
-            y: bounds.origin.y, // center the image
+            y: bounds.origin.y - 3, // center the image
             width: ratio * height,
             height: height
         )

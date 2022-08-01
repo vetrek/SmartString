@@ -24,7 +24,9 @@ class ViewController: UIViewController {
 //        label.smartString = "<primary>Hello </primary><secondary>world!</secondary>".smartStringXML
         
         let xmlString = "Hello ".tag(XMLStringStyles.primary) + "world! ".tag(XMLStringStyles.secondary)
-        label.smartString = xmlString.smartStringXML.appendImage(UIImage(systemName: "qrcode")!.withTintColor(.white))
+        label.smartString = "Add ".appendImage(UIImage(systemName: "plus")!.withTintColor(.white), height: 16)
+        + " or Import ".appendImage(UIImage(systemName: "square.and.arrow.down")!.withTintColor(.white), height: 16)
+        + "\n what you need"
 
         label.sizeToFit()
         label.numberOfLines = 0
