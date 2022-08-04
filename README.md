@@ -11,6 +11,22 @@ Powerful and small library written in **Swift** that will allow you to create co
 - [x] Create and store predefined & reusable Styles
 - [x] Ideal for anyone who builds UI from code
 
+## Installation
+
+### Swift Package Manager
+The [Swift Package Manager](https://swift.org/package-manager/) is a tool for automating the distribution of Swift code and is integrated into the `swift` compiler.
+
+In Xcode 11+ select File > Packages > Add Package Dependency > Enter this project's URL:
+    
+    https://github.com/vetrek/SmartString.git
+
+
+### CocoaPods
+
+```ruby
+pod 'SmartString'
+```
+
 ## Example
 
 * ### Usage
