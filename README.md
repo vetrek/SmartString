@@ -1,4 +1,6 @@
 # SmartString
+[![Swift 5.1](https://img.shields.io/badge/Swift-5.1-orange.svg?style=flat)](https://swift.org)
+![iOS 10.0](https://img.shields.io/badge/iOS-10.0-blue.svg?style=flat)
 
 Powerful and small library written in **Swift** that will allow you to create complex attributed strings. Easily chain Strings + SmartStrings to create the perfect style, and register substrings Tap Getures handlers.
 
