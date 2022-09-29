@@ -27,7 +27,7 @@ import UIKit
 public typealias StringClosure = (String) -> Void
 
 public final class SmartString: SmartStringable {
-    var attributedText: NSMutableAttributedString!
+    public private(set) var attributedText: NSMutableAttributedString!
     var tappableRanges: [NSRange: StringClosure] = [:]
     
     public var string: String { attributedText.string }
