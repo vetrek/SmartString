@@ -112,8 +112,8 @@ extension UITapGestureRecognizer {
             var leading: CGFloat = 0.0
             
             let width = CGFloat(CTLineGetTypographicBounds(line, &ascent, &descent, &leading))
-            let yMin = floor(lineOrigin.y - ascent)
-            let yMax = ceil(lineOrigin.y + descent)
+            let yMin = ceil(lineOrigin.y - descent)
+            let yMax = floor(lineOrigin.y + ascent)
             
             let penOffset = CGFloat(CTLineGetPenOffsetForFlush(line, label.flushFactor, Double(txtRect.width)))
             lineOrigin.x = penOffset
@@ -134,5 +134,4 @@ extension UITapGestureRecognizer {
         
         return NSLocationInRange(index, targetRange)
     }
-    
 }
