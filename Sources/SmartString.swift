@@ -27,11 +27,16 @@ import UIKit
 public typealias StringClosure = (String) -> Void
 
 public final class SmartString: SmartStringable {
-    public private(set) var attributedText: NSMutableAttributedString!
-    var tappableRanges: [NSRange: StringClosure] = [:]
+
+    // MARK: - Public Properties
     
+    public private(set) var attributedText: NSMutableAttributedString!
     public var string: String { attributedText.string }
     
+    // MARK: - Private Properties
+    var tappableRanges: [NSRange: StringClosure] = [:]
+    
+    // MARK: - Init
     init() {
         self.attributedText = NSMutableAttributedString(string: "")
     }
@@ -65,13 +70,7 @@ public final class SmartString: SmartStringable {
         }
     }
     
-    func append(string: String) {
-        attributedText.append(NSAttributedString(string: string))
-    }
-    
-    func append(smartString: SmartString) {
-        attributedText.append(smartString.attributedText)
-    }
+    // MARK: - Public overload operators
     
     public static func +(lhs: SmartString, rhs: String) -> SmartString {
         lhs.append(string: rhs)
@@ -97,13 +96,27 @@ public final class SmartString: SmartStringable {
         lhs.append(smartString: rhs)
     }
     
+    // MARK: - Public Utility functions
+    
     public func height(for width: CGFloat) -> CGFloat {
         attributedText.computeStringHeight(width: width)
     }
     
 }
 
-// MARK: - Internal Properties
+// MARK: - Internal functions
+
+extension SmartString {
+    func append(string: String) {
+        attributedText.append(NSAttributedString(string: string))
+    }
+    
+    func append(smartString: SmartString) {
+        attributedText.append(smartString.attributedText)
+    }
+}
+
+// MARK: - Internal Computed Properties
 
 extension SmartString {
     var length: Int {
