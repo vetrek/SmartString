@@ -6,7 +6,7 @@ import PackageDescription
 let package = Package(
     name: "SmartString",
     platforms: [
-        .iOS(.v10),
+        .iOS(.v11),
         .macOS(.v10_15)
     ],
     products: [
