@@ -166,6 +166,13 @@ public extension SmartString {
         return self
     }
     
+    @discardableResult
+    func align(_ alignment: NSTextAlignment) -> SmartString {
+        let paragraph = NSMutableParagraphStyle()
+        paragraph.alignment = alignment
+        return addAttribute(key: .paragraphStyle, value: paragraph)
+    }
+    
     // MARK: - Color
     
     @discardableResult

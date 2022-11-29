@@ -50,6 +50,10 @@ extension String: SmartStringable {
         SmartString(string: self).style(smartStyle)
     }
     
+    public func align(_ alignment: NSTextAlignment) -> SmartString {
+        SmartString(string: self).align(alignment)
+    }
+    
     // MARK: - Color
     
     public func color(_ color: UIColor) -> SmartString {

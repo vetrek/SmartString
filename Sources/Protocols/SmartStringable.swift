@@ -26,12 +26,15 @@ import Foundation
 import UIKit
 
 public protocol SmartStringable {
+   
     // MARK: - Style
 
     /// Set SmartString style
     /// - Parameter style: The a SmartStringStyle object.
     /// - Returns: The new SmartString instance.
     func style(_ style: SmartStringStyle) -> SmartString
+    
+    func align(_ alignment: NSTextAlignment) -> SmartString 
     
     // MARK: - Color
     
