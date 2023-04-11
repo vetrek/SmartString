@@ -71,7 +71,7 @@ public final class SmartString: SmartStringable, ExpressibleByStringLiteral {
     }
     
     public init(stringLiteral value: String) {
-        self.attributedText = NSMutableAttributedString(string: string)
+        self.attributedText = NSMutableAttributedString(string: value)
     }
     
     // MARK: - Public overload operators
