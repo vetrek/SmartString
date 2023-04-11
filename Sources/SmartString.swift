@@ -26,7 +26,7 @@ import UIKit
 
 public typealias StringClosure = (String) -> Void
 
-public final class SmartString: SmartStringable {
+public final class SmartString: SmartStringable, ExpressibleByStringLiteral {
 
     // MARK: - Public Properties
     
@@ -68,6 +68,10 @@ public final class SmartString: SmartStringable {
                 UIApplication.shared.open(url)
             }
         }
+    }
+    
+    public init(stringLiteral value: String) {
+        self.attributedText = NSMutableAttributedString(string: string)
     }
     
     // MARK: - Public overload operators
