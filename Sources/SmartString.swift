@@ -27,307 +27,326 @@ import UIKit
 public typealias StringClosure = (String) -> Void
 
 public final class SmartString: SmartStringable, ExpressibleByStringLiteral {
-
-    // MARK: - Public Properties
-    
-    public private(set) var attributedText: NSMutableAttributedString!
-    public var string: String { attributedText.string }
-    
-    // MARK: - Private Properties
-    var tappableRanges: [NSRange: StringClosure] = [:]
-    
-    // MARK: - Init
-    init() {
-        self.attributedText = NSMutableAttributedString(string: "")
+  
+  // MARK: - Public Properties
+  
+  public private(set) var attributedText: NSMutableAttributedString!
+  public var string: String { attributedText.string }
+  
+  // MARK: - Private Properties
+  var tappableRanges: [NSRange: StringClosure] = [:]
+  
+  // MARK: - Init
+  init() {
+    self.attributedText = NSMutableAttributedString(string: "")
+  }
+  
+  public init(string: String, hasXML: Bool = false) {
+    guard
+      hasXML,
+      let xmlSmartString = try? XMLStringParser(string: string).parse()
+    else {
+      self.attributedText = NSMutableAttributedString(string: string)
+      return
     }
+    self.tappableRanges = xmlSmartString.tappableRanges
+    self.attributedText = xmlSmartString.attributedText
+  }
+  
+  public init(attributedString: NSAttributedString) {
+    self.attributedText = NSMutableAttributedString(attributedString: attributedString)
     
-    public init(string: String, hasXML: Bool = false) {
-        guard
-            hasXML,
-            let xmlSmartString = try? XMLStringParser(string: string).parse()
-        else {
-            self.attributedText = NSMutableAttributedString(string: string)
-            return
-        }
-        self.tappableRanges = xmlSmartString.tappableRanges
-        self.attributedText = xmlSmartString.attributedText
+    let mutable = NSMutableAttributedString(attributedString: attributedString)
+    let fullRange = NSRange(location: 0, length: mutable.length)
+    mutable.enumerateAttributes(in: fullRange) { value, range, _ in
+      guard
+        value.keys.contains(.link),
+        let url = value[.link] as? URL
+      else { return }
+      tappableRanges[range] = { _ in
+        guard UIApplication.shared.canOpenURL(url) else { return }
+        UIApplication.shared.open(url)
+      }
     }
-    
-    public init(attributedString: NSAttributedString) {
-        self.attributedText = NSMutableAttributedString(attributedString: attributedString)
-        
-        let mutable = NSMutableAttributedString(attributedString: attributedString)
-        let fullRange = NSRange(location: 0, length: mutable.length)
-        mutable.enumerateAttributes(in: fullRange) { value, range, _ in
-            guard
-                value.keys.contains(.link),
-                let url = value[.link] as? URL
-            else { return }
-            tappableRanges[range] = { _ in
-                guard UIApplication.shared.canOpenURL(url) else { return }
-                UIApplication.shared.open(url)
-            }
-        }
+  }
+  
+  public init(stringLiteral value: String) {
+    self.attributedText = NSMutableAttributedString(string: value)
+  }
+  
+  // MARK: - Public overload operators
+  
+  public static func +(lhs: SmartString, rhs: String) -> SmartString {
+    lhs.append(string: rhs)
+    return lhs
+  }
+  
+  public static func +(lhs: SmartString, rhs: SmartString) -> SmartString {
+    if let tappableRange = rhs.tappableRanges.first {
+      let range = NSMakeRange(lhs.length, tappableRange.key.length)
+      
+      lhs.tappableRanges[range] = tappableRange.value
     }
-    
-    public init(stringLiteral value: String) {
-        self.attributedText = NSMutableAttributedString(string: value)
+    lhs.append(smartString: rhs)
+    return lhs
+  }
+  
+  public static func +=(lhs: SmartString, rhs: SmartString) {
+    if let tappableRange = rhs.tappableRanges.first {
+      let range = NSMakeRange(lhs.length, tappableRange.key.length)
+      
+      lhs.tappableRanges[range] = tappableRange.value
     }
-    
-    // MARK: - Public overload operators
-    
-    public static func +(lhs: SmartString, rhs: String) -> SmartString {
-        lhs.append(string: rhs)
-        return lhs
-    }
-    
-    public static func +(lhs: SmartString, rhs: SmartString) -> SmartString {
-        if let tappableRange = rhs.tappableRanges.first {
-            let range = NSMakeRange(lhs.length, tappableRange.key.length)
-            
-            lhs.tappableRanges[range] = tappableRange.value
-        }
-        lhs.append(smartString: rhs)
-        return lhs
-    }
-    
-    public static func +=(lhs: SmartString, rhs: SmartString) {
-        if let tappableRange = rhs.tappableRanges.first {
-            let range = NSMakeRange(lhs.length, tappableRange.key.length)
-            
-            lhs.tappableRanges[range] = tappableRange.value
-        }
-        lhs.append(smartString: rhs)
-    }
-    
-    // MARK: - Public Utility functions
-    
-    public func height(for width: CGFloat) -> CGFloat {
-        attributedText.computeStringHeight(width: width)
-    }
-    
+    lhs.append(smartString: rhs)
+  }
+  
+  // MARK: - Public Utility functions
+  
+  public func height(for width: CGFloat) -> CGFloat {
+    attributedText.computeStringHeight(width: width)
+  }
+  
 }
 
 // MARK: - Internal functions
 
 extension SmartString {
-    func append(string: String) {
-        attributedText.append(NSAttributedString(string: string))
-    }
-    
-    func append(smartString: SmartString) {
-        attributedText.append(smartString.attributedText)
-    }
+  func append(string: String) {
+    attributedText.append(NSAttributedString(string: string))
+  }
+  
+  func append(smartString: SmartString) {
+    attributedText.append(smartString.attributedText)
+  }
 }
 
 // MARK: - Internal Computed Properties
 
 extension SmartString {
-    var length: Int {
-        attributedText.length
-    }
-    
-    var fullRange: NSRange {
-        NSMakeRange(0, length)
-    }
+  var length: Int {
+    attributedText.length
+  }
+  
+  var fullRange: NSRange {
+    NSMakeRange(0, length)
+  }
 }
 
 // MARK: - Public Methods
 
 public extension SmartString {
-    // MARK: - Style
-    
-    @discardableResult
-    func style(_ style: SmartStringStyle) -> SmartString {
-        if let font = style.font {
-            self.font(font)
-        }
-        
-        if let color = style.color {
-            self.color(color)
-        }
-        
-        if let backgroundColor = style.backgroundColor {
-            self.background(backgroundColor)
-        }
-        
-        if let shadow = style.shadow {
-            self.shadow(shadow)
-        }
-        
-        if style.underlined {
-            self.underline()
-        }
-        
-        if let url = style.link {
-            self.link(url)
-        }
-        
-        if let onTap = style.onTap {
-            self.onTap(closure: onTap)
-        }
-        
-        return self
+  // MARK: - Style
+  
+  @discardableResult
+  func style(_ style: SmartStringStyle) -> SmartString {
+    if let font = style.font {
+      self.font(font)
     }
     
-    @discardableResult
-    func align(_ alignment: NSTextAlignment) -> SmartString {
-        let paragraph = NSMutableParagraphStyle()
-        paragraph.alignment = alignment
-        return addAttribute(key: .paragraphStyle, value: paragraph)
+    if let color = style.color {
+      self.color(color)
     }
     
-    // MARK: - Color
-    
-    @discardableResult
-    func color(_ color: UIColor) -> SmartString {
-        addAttribute(key: .foregroundColor, value: color)
+    if let backgroundColor = style.backgroundColor {
+      self.background(backgroundColor)
     }
     
-    @discardableResult
-    func color(closure: () -> UIColor) -> SmartString {
-        color(closure())
+    if let shadow = style.shadow {
+      self.shadow(shadow)
     }
     
-    @discardableResult
-    func background(_ color: UIColor) -> SmartString {
-        addAttribute(key: .backgroundColor, value: color)
+    if style.underlined {
+      self.underline()
     }
     
-    @discardableResult
-    func background(closure: () -> UIColor) -> SmartString {
-        background(closure())
+    if let url = style.link {
+      self.link(url)
     }
     
-    // MARK: - Font
-    
-    @discardableResult
-    func font(_ font: UIFont) -> SmartString {
-        addAttribute(key: .font, value: font)
+    if let onTap = style.onTap {
+      self.onTap(closure: onTap)
     }
     
-    @discardableResult
-    func font(closure: () -> UIFont) -> SmartString {
-        font(closure())
+    return self
+  }
+  
+  @discardableResult
+  func align(_ alignment: NSTextAlignment) -> SmartString {
+    let paragraph = NSMutableParagraphStyle()
+    paragraph.alignment = alignment
+    return addAttribute(key: .paragraphStyle, value: paragraph)
+  }
+  
+  @discardableResult
+  func lineSpacing(_ lineSpacing: CGFloat) -> SmartString {
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.lineSpacing = lineSpacing
+    return addAttribute(key: .paragraphStyle, value: paragraphStyle)
+  }
+  
+  @discardableResult
+  func lineHeight(_ height: CGFloat) -> SmartString {
+    let paragraphStyle = NSMutableParagraphStyle()
+    paragraphStyle.minimumLineHeight = height
+    paragraphStyle.maximumLineHeight = height
+    return addAttribute(key: .paragraphStyle, value: paragraphStyle)
+  }
+  
+  @discardableResult
+  func charactersSpacing(_ space: CGFloat) -> SmartString {
+    addAttribute(key: .kern, value: space)
+  }
+  
+  // MARK: - Color
+  
+  @discardableResult
+  func color(_ color: UIColor) -> SmartString {
+    addAttribute(key: .foregroundColor, value: color)
+  }
+  
+  @discardableResult
+  func color(closure: () -> UIColor) -> SmartString {
+    color(closure())
+  }
+  
+  @discardableResult
+  func background(_ color: UIColor) -> SmartString {
+    addAttribute(key: .backgroundColor, value: color)
+  }
+  
+  @discardableResult
+  func background(closure: () -> UIColor) -> SmartString {
+    background(closure())
+  }
+  
+  // MARK: - Font
+  
+  @discardableResult
+  func font(_ font: UIFont) -> SmartString {
+    addAttribute(key: .font, value: font)
+  }
+  
+  @discardableResult
+  func font(closure: () -> UIFont) -> SmartString {
+    font(closure())
+  }
+  
+  @discardableResult
+  func underline() -> SmartString {
+    addAttribute(key: .underlineStyle, value: NSUnderlineStyle.single.rawValue)
+  }
+  
+  /// To work you must have set a font prior to this. Otherwise there is not Font to convert to bold
+  /// - Returns: SmartString instance
+  @discardableResult
+  func bold() -> SmartString {
+    guard attributedText.length > 0 else { return self }
+    let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
+    if let font = attributes[NSAttributedString.Key.font] as? UIFont {
+      let bold = font.bold()
+      addAttribute(key: .font, value: bold)
     }
-    
-    @discardableResult
-    func underline() -> SmartString {
-        addAttribute(key: .underlineStyle, value: NSUnderlineStyle.single.rawValue)
+    else {
+      print("SmartString 🔵", "Bold can only be applied if the SmartString has an associated Font")
     }
-    
-    /// To work you must have set a font prior to this. Otherwise there is not Font to convert to bold
-    /// - Returns: SmartString instance
-    @discardableResult
-    func bold() -> SmartString {
-        guard attributedText.length > 0 else { return self }
-        let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
-        if let font = attributes[NSAttributedString.Key.font] as? UIFont {
-            let bold = font.bold()
-            addAttribute(key: .font, value: bold)
-        }
-        else {
-            print("SmartString 🔵", "Bold can only be applied if the SmartString has an associated Font")
-        }
-        return self
+    return self
+  }
+  
+  @discardableResult
+  func italic() -> SmartString {
+    guard attributedText.length > 0 else { return self }
+    let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
+    if let font = attributes[NSAttributedString.Key.font] as? UIFont {
+      let italic = font.italic()
+      addAttribute(key: .font, value: italic)
     }
-    
-    @discardableResult
-    func italic() -> SmartString {
-        guard attributedText.length > 0 else { return self }
-        let attributes = attributedText.attributes(at: 0, effectiveRange: nil)
-        if let font = attributes[NSAttributedString.Key.font] as? UIFont {
-            let italic = font.italic()
-            addAttribute(key: .font, value: italic)
-        }
-        else {
-            print("SmartString 🔵", "italic can only be applied if the SmartString has an associated Font")
-        }
-        return self
+    else {
+      print("SmartString 🔵", "italic can only be applied if the SmartString has an associated Font")
     }
-    
-    // MARK: - Shadow
-    
-    @discardableResult
-    func shadow(_ shadow: SmartShadow) -> SmartString {
-        addAttribute(key: .shadow, value: shadow.toNSShadow())
+    return self
+  }
+  
+  // MARK: - Shadow
+  
+  @discardableResult
+  func shadow(_ shadow: SmartShadow) -> SmartString {
+    addAttribute(key: .shadow, value: shadow.toNSShadow())
+  }
+  
+  @discardableResult
+  func shadow(closure: () -> SmartShadow) -> SmartString {
+    shadow(closure())
+  }
+  
+  // MARK: - Link
+  
+  @discardableResult
+  func link(_ url: URL) -> SmartString {
+    addAttribute(key: .link, value: url)
+    return onTap { _ in
+      guard UIApplication.shared.canOpenURL(url) else { return }
+      UIApplication.shared.open(url)
     }
-    
-    @discardableResult
-    func shadow(closure: () -> SmartShadow) -> SmartString {
-        shadow(closure())
-    }
-    
-    // MARK: - Link
-    
-    @discardableResult
-    func link(_ url: URL) -> SmartString {
-        addAttribute(key: .link, value: url)
-        return onTap { _ in
-            guard UIApplication.shared.canOpenURL(url) else { return }
-            UIApplication.shared.open(url)
-        }
-    }
-    
-    func link(closure: () -> URL) -> SmartString {
-        link(closure())
-    }
-    
-    // MARK: - Image
-    
-    @discardableResult
-    func appendImage(_ image: UIImage, height: CGFloat = 18) -> SmartString {
-        let attachment = NSTextAttachment()
-        attachment.image = image
-        attachment.setImageHeight(height: height)
-        attributedText.append(NSAttributedString(attachment: attachment))
-        return self
-    }
-    
-    func appendImage(height: CGFloat, closure: () -> UIImage) -> SmartString {
-        appendImage(closure(), height: height)
-    }
-        
-    // MARK: - Tap Handler
-    
-    @discardableResult
-    func onTap(closure: @escaping (String) -> Void) -> SmartString {
-        tappableRanges[fullRange] = closure
-        return self
-    }
+  }
+  
+  func link(closure: () -> URL) -> SmartString {
+    link(closure())
+  }
+  
+  // MARK: - Image
+  
+  @discardableResult
+  func appendImage(_ image: UIImage, height: CGFloat = 18) -> SmartString {
+    let attachment = NSTextAttachment()
+    attachment.image = image
+    attachment.setImageHeight(height: height)
+    attributedText.append(NSAttributedString(attachment: attachment))
+    return self
+  }
+  
+  func appendImage(height: CGFloat, closure: () -> UIImage) -> SmartString {
+    appendImage(closure(), height: height)
+  }
+  
+  // MARK: - Tap Handler
+  
+  @discardableResult
+  func onTap(closure: @escaping (String) -> Void) -> SmartString {
+    tappableRanges[fullRange] = closure
+    return self
+  }
 }
 
 extension SmartString {
-    func removeAttribute(key: NSAttributedString.Key) {
-        attributedText.enumerateAttribute(
-            key,
-            in: fullRange,
-            options: [],
-            using: { value, range, _ in
-                guard value != nil else { return }
-                attributedText.removeAttribute(key, range: range)
-            }
-        )
+  func removeAttribute(key: NSAttributedString.Key) {
+    attributedText.enumerateAttribute(
+      key,
+      in: fullRange,
+      options: [],
+      using: { value, range, _ in
+        guard value != nil else { return }
+        attributedText.removeAttribute(key, range: range)
+      }
+    )
+  }
+  
+  @discardableResult
+  func addAttribute(key: NSAttributedString.Key, value: Any) -> SmartString {
+    removeAttribute(key: key)
+    attributedText.addAttributes([key: value], range: fullRange)
+    return self
+  }
+  
+  @objc func labelDidTap(gesture: UITapGestureRecognizer) {
+    guard let label = gesture.view as? UILabel else { return }
+    for tappableRange in tappableRanges {
+      guard
+        gesture.didTapAttributedTextInLabel(label: label, inRange: tappableRange.key)
+      else { continue }
+      
+      let string = attributedText.attributedSubstring(from: tappableRange.key).string
+      tappableRange.value(string)
+      return
     }
-    
-    @discardableResult
-    func addAttribute(key: NSAttributedString.Key, value: Any) -> SmartString {
-        removeAttribute(key: key)
-        attributedText.addAttributes([key: value], range: fullRange)
-        return self
-    }
-    
-    @objc func labelDidTap(gesture: UITapGestureRecognizer) {
-        guard let label = gesture.view as? UILabel else { return }
-        for tappableRange in tappableRanges {
-            guard
-                gesture.didTapAttributedTextInLabel(label: label, inRange: tappableRange.key)
-            else { continue }
-            
-            let string = attributedText.attributedSubstring(from: tappableRange.key).string
-            tappableRange.value(string)
-            return
-        }
-    }
-
+  }
 }
