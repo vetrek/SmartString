@@ -25,9 +25,9 @@
 import Foundation
 
 public enum SmartStringXMLStyles {
-    public static var styles: [String: SmartStringStyle] = [:]
-    
-    static subscript(element tag: String) -> SmartStringStyle? {
-        return Self.styles[tag]
-    }
+  public static var styles: [String: SmartStringStyle] = [:]
+  
+  static subscript(element tag: String) -> SmartStringStyle? {
+    return Self.styles[tag]
+  }
 }

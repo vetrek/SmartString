@@ -26,15 +26,15 @@ import Foundation
 import UIKit
 
 public extension UITextView {
-    private static let smartString = AssociatedObject<SmartString>()
-    
-    var smartString: SmartString? {
-        get {
-            return UITextView.smartString[self]
-        }
-        set {
-            attributedText = newValue?.attributedText
-            UITextView.smartString[self] = newValue
-        }
+  private static let smartString = AssociatedObject<SmartString>()
+  
+  var smartString: SmartString? {
+    get {
+      return UITextView.smartString[self]
     }
+    set {
+      attributedText = newValue?.attributedText
+      UITextView.smartString[self] = newValue
+    }
+  }
 }

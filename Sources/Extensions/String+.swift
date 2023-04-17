@@ -61,7 +61,7 @@ extension String: SmartStringable {
   public func lineHeight(_ height: CGFloat) -> SmartString {
     SmartString(string: self).lineHeight(height)
   }
-   
+  
   public func charactersSpacing(_ space: CGFloat) -> SmartString {
     SmartString(string: self).charactersSpacing(space)
   }
