@@ -153,7 +153,7 @@ public extension String {
 }
 
 extension String {
-  /// SwifterSwift: Safely subscript string within a given range.
+  /// Safely subscript string within a given range.
   ///
   ///        "Hello World!"[safe: 6..<11] -> "World"
   ///        "Hello World!"[safe: 21..<110] -> nil
