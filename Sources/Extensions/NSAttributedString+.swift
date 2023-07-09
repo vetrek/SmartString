@@ -31,9 +31,8 @@ public extension NSAttributedString {
   }
 }
 
-extension NSAttributedString {
+public extension NSAttributedString {
   func computeStringHeight(width: CGFloat) -> CGFloat {
-    var height: CGFloat = 0
     // Create the framesetter with the attributed string.
     let framesetter = CTFramesetterCreateWithAttributedString(self as CFAttributedString)
     
@@ -57,18 +56,19 @@ extension NSAttributedString {
     let lines = CTFrameGetLines(frame)
     let lineCount = CFArrayGetCount(lines)
     
+    var height: CGFloat = 0
     var h: CGFloat = 0
     var ascent: CGFloat = 0
     var descent: CGFloat = 0
     var leading: CGFloat = 0
     
     for index in 0..<lineCount {
-      let currentLine = unsafeBitCast(CFArrayGetValueAtIndex(lines, index), to: CTLine.self)
-      CTLineGetTypographicBounds(currentLine, &ascent, &descent, &leading)
-      h = ascent + descent + leading;
+      let line = unsafeBitCast(CFArrayGetValueAtIndex(lines, index), to: CTLine.self)
+      CTLineGetTypographicBounds(line, &ascent, &descent, &leading)
+      h = max(0, ascent + descent + leading)
       height += h
     }
     
-    return height + 1
+    return max(1, height + 1)
   }
 }

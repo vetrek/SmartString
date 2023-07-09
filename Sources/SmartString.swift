@@ -338,15 +338,31 @@ extension SmartString {
   }
   
   @objc func labelDidTap(gesture: UITapGestureRecognizer) {
-    guard let label = gesture.view as? UILabel else { return }
-    for tappableRange in tappableRanges {
-      guard
-        gesture.didTapAttributedTextInLabel(label: label, inRange: tappableRange.key)
-      else { continue }
+    switch gesture.view {
+    case let label as UILabel:
+      for tappableRange in tappableRanges {
+        guard
+          gesture.didTapAttributedTextInLabel(label: label, inRange: tappableRange.key)
+        else { continue }
+        
+        let string = attributedText.attributedSubstring(from: tappableRange.key).string
+        tappableRange.value(string)
+        return
+      }
+    case let textView as UITextView:
+      for tappableRange in tappableRanges {
+        guard
+          gesture.didTapAttributedTextInLabel(label: textView, inRange: tappableRange.key)
+        else { continue }
+        
+        let string = attributedText.attributedSubstring(from: tappableRange.key).string
+        tappableRange.value(string)
+        return
+      }
       
-      let string = attributedText.attributedSubstring(from: tappableRange.key).string
-      tappableRange.value(string)
+    default:
       return
     }
+    
   }
 }

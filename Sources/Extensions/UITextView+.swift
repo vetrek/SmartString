@@ -35,6 +35,30 @@ public extension UITextView {
     set {
       attributedText = newValue?.attributedText
       UITextView.smartString[self] = newValue
+      
+      guard
+        let smartString = smartString,
+        !smartString.tappableRanges.isEmpty
+      else { return }
+      
+      isUserInteractionEnabled = true
+      addGestureRecognizer(
+        UITapGestureRecognizer(
+          target: newValue,
+          action: #selector(smartString.labelDidTap)
+        )
+      )
+    }
+  }
+  
+  var flushFactor: CGFloat {
+    switch textAlignment {
+    case .center:
+      return 0.5
+    case .right:
+      return 1.0
+    default:
+      return 0.0
     }
   }
 }
