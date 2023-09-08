@@ -13,7 +13,7 @@ Powerful and small library written in **Swift** that will allow you to create co
 - [x] Create and store predefined & reusable Styles
 - [x] Ideal for anyone who builds UI from code
 
-## Projects using Roadmap
+## Projects using SmartString
 - [YourVPN](https://yourvpn.world/)
 
 ## Installation
